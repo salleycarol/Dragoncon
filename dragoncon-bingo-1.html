@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragon Con 2026 Bingo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150526;
+    --purple:#3B1264;
+    --purple-deep:#20083D;
+    --gold:#F0C23A;
+    --gold-dark:#B8891A;
+    --paper:#FDFBF6;
+    --ink:#1E1030;
+    --line: rgba(240,194,58,0.35);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:'Inter', sans-serif;
+    color:var(--paper);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:24px 14px 56px;
+  }
+  .wrap{width:100%; max-width:460px;}
+  .frame{
+    border:3px solid var(--gold);
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--purple-deep);
+  }
+  header{
+    background:linear-gradient(180deg, var(--purple) 0%, var(--purple-deep) 100%);
+    text-align:center;
+    padding:22px 16px 18px;
+    position:relative;
+  }
+  .kicker{
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:3px;
+    color:var(--gold);
+    opacity:0.85;
+  }
+  h1{
+    font-family:'Cinzel', serif;
+    font-weight:900;
+    font-size:34px;
+    letter-spacing:1px;
+    margin:6px 0 0;
+    background:linear-gradient(180deg, #FCE9A8 0%, var(--gold) 55%, var(--gold-dark) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  h2{
+    font-family:'Cinzel', serif;
+    font-weight:900;
+    font-size:44px;
+    letter-spacing:2px;
+    margin:2px 0 0;
+    background:linear-gradient(180deg, #FCE9A8 0%, var(--gold) 55%, var(--gold-dark) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .stars{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-top:6px;
+    color:var(--gold);
+    font-size:14px;
+  }
+  .infobar{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    background:var(--paper);
+    border-bottom:3px solid var(--gold);
+    padding:10px 14px;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:11px;
+    color:var(--ink);
+  }
+  .infobar span.label{
+    color:var(--purple);
+    margin-right:4px;
+  }
+  .win-banner{
+    display:none;
+    text-align:center;
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    font-size:18px;
+    color:var(--purple-deep);
+    background:var(--gold);
+    padding:10px;
+  }
+  .win-banner.show{display:block;}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:3px;
+    background:var(--gold);
+    padding:3px;
+  }
+  .cell{
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:var(--paper);
+    color:var(--ink);
+    font-size:10.5px;
+    line-height:1.15;
+    font-weight:600;
+    padding:5px;
+    cursor:pointer;
+    user-select:none;
+    position:relative;
+  }
+  .cell.free{
+    background:var(--purple);
+    color:var(--gold);
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    font-size:13px;
+  }
+  .cell.marked{
+    background:var(--gold);
+    color:var(--gold-dark);
+  }
+  .cell.marked::after{
+    content:'';
+    position:absolute;
+    inset:5px;
+    border:2px solid var(--purple);
+    border-radius:6px;
+    opacity:0.4;
+  }
+  footer{
+    background:var(--purple-deep);
+    text-align:center;
+    padding:16px;
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:1px;
+    color:var(--gold);
+  }
+  .actions{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+  }
+  .actions button{
+    flex:1;
+    padding:12px 0;
+    border-radius:10px;
+    border:2px solid var(--gold);
+    background:var(--purple-deep);
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    color:var(--gold);
+    cursor:pointer;
+  }
+  .actions button.primary{
+    background:var(--gold);
+    color:var(--purple-deep);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="frame">
+    <header>
+      <div class="kicker">Celebrating 40 years of fandom</div>
+      <h1>Dragon Con 2026</h1>
+      <h2>Bingo</h2>
+      <div class="stars">&#9733; &#9733; &#9733;</div>
+    </header>
+    <div class="infobar">
+      <div><span class="label">Card #</span><span id="cardNum">—</span></div>
+      <div><span class="label">Date</span><span id="cardDate">—</span></div>
+    </div>
+    <div class="win-banner" id="winBanner">Bingo!</div>
+    <div class="grid" id="grid"></div>
+    <footer>Have fun. Be kind. Don't be a dragon.</footer>
+  </div>
+  <div class="actions">
+    <button id="newCardBtn" class="primary">New card</button>
+    <button id="clearBtn">Clear marks</button>
+  </div>
+</div>
+
+<script>
+  const ITEMS = [
+    'Utility Kilt',
+    'Found Swag',
+    'Inflatable T-Rex Dance Party',
+    'Phone below 20%',
+    'Dragoncon TV Static',
+    'Celebrity Sighting Outside',
+    'Bought Expensive Food',
+    'Crowd Stopped at Escalator',
+    'Understood Obscure Reference',
+    'Location Changed',
+    'Fedex John Altar',
+    'Carpet Cult Sighting',
+    'Too Many People!',
+    'Good Spot to Sit',
+    'Costume Perfection',
+    'Found Waldo',
+    'Wrong Hotel',
+    'Too Smelly!',
+    'Stopped in Skybridge',
+    'Got a Table at 22 Storys',
+    'Ate at Con Suite',
+    'Stayed out Past 10',
+    'Real Cop or Cosplay?',
+    'Con Friend'
+  ];
+  const FREE = 'Free Space';
+
+  function shuffled(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function randCard(){
+    const picks = shuffled(ITEMS).slice(0,24);
+    const card = [];
+    let idx = 0;
+    for(let r=0;r<5;r++){
+      const row = [];
+      for(let c=0;c<5;c++){
+        row.push(r===2 && c===2 ? FREE : picks[idx++]);
+      }
+      card.push(row);
+    }
+    return card;
+  }
+
+  let card = randCard();
+  let marked = new Set(['2-2']);
+
+  const grid = document.getElementById('grid');
+  const winBanner = document.getElementById('winBanner');
+  const cardNum = document.getElementById('cardNum');
+  const cardDate = document.getElementById('cardDate');
+
+  function checkWin(){
+    const M = (r,c)=> marked.has(r+'-'+c);
+    for(let r=0;r<5;r++){ if([0,1,2,3,4].every(c=>M(r,c))) return true; }
+    for(let c=0;c<5;c++){ if([0,1,2,3,4].every(r=>M(r,c))) return true; }
+    if([0,1,2,3,4].every(i=>M(i,i))) return true;
+    if([0,1,2,3,4].every(i=>M(i,4-i))) return true;
+    return false;
+  }
+
+  function render(){
+    grid.innerHTML = '';
+    for(let r=0;r<5;r++){
+      for(let c=0;c<5;c++){
+        const val = card[r][c];
+        const key = r+'-'+c;
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.textContent = val;
+        if(val===FREE){
+          cell.classList.add('free');
+        } else {
+          if(marked.has(key)) cell.classList.add('marked');
+          cell.addEventListener('click', ()=>{
+            if(marked.has(key)) marked.delete(key); else marked.add(key);
+            render();
+          });
+        }
+        grid.appendChild(cell);
+      }
+    }
+    winBanner.classList.toggle('show', checkWin());
+  }
+
+  function newCardMeta(){
+    cardNum.textContent = String(Math.floor(1000 + Math.random()*9000));
+    cardDate.textContent = new Date().toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+  }
+
+  document.getElementById('newCardBtn').addEventListener('click', ()=>{
+    card = randCard();
+    marked = new Set(['2-2']);
+    newCardMeta();
+    render();
+  });
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    marked = new Set(['2-2']);
+    render();
+  });
+
+  newCardMeta();
+  render();
+</script>
+</body>
+</html>
